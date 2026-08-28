@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostGrid from "../../components/PostGrid.svelte";
+import SeriesGrid from "../../components/SeriesGrid.svelte";
+import Pagination from "../../components/Pagination.svelte";
+import {AstroPostRepository} from "../../infrastructure/repositories/AstroPostRepository.js";
+import {AstroSeriesRepository} from "../../infrastructure/repositories/AstroSeriesRepository.js";
+
+export async function getStaticPaths() {
+    const postRepo = new AstroPostRepository();
+    const pageSize = 9;
+    const allPosts = await postRepo.findAll();
+    const totalPages = Math.max(1, Math.ceil(allPosts.length / pageSize));
+
+    return Array.from({length: totalPages}, (_, i) => ({
+        params: {page: String(i + 1)},
+        props: {pageNumber: i + 1, pageSize, totalPages},
+    }));
+}
+
+const {pageNumber, pageSize, totalPages} = Astro.props;
+
+const postRepo = new AstroPostRepository();
+const seriesRepo = new AstroSeriesRepository();
+
+const [paginatedPosts, allSeries] = await Promise.all([
+    postRepo.paginate(pageNumber, pageSize),
+    seriesRepo.findAll(),
+]);
+---
+
+<BaseLayout title="Blog — Caio Couto">
+    <PostGrid posts={paginatedPosts.items}/>
+    <Pagination result={paginatedPosts} baseUrl="/page"/>
+    {allSeries.length > 0 && (
+            <section>
+                <h2>Séries</h2>
+                <SeriesGrid seriesList={allSeries}/>
+            </section>
+    )}
+</BaseLayout>

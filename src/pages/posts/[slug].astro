@@ -1,0 +1,32 @@
+---
+import {getCollection, render} from "astro:content";
+import PostLayout from "../../layouts/PostLayout.astro";
+import {AstroPostRepository} from "../../infrastructure/repositories/AstroPostRepository.js";
+import {AstroSeriesRepository} from "../../infrastructure/repositories/AstroSeriesRepository.js";
+import {PostMapper} from "../../infrastructure/mappers/PostMapper.js";
+
+export async function getStaticPaths() {
+    const entries = await getCollection("posts");
+    return entries.map((entry) => ({
+        params: {slug: entry.id.replace(/\.(md|mdx)$/, "")},
+        props: {entry},
+    }));
+}
+
+const {entry} = Astro.props;
+const post = PostMapper.toDomain(entry);
+
+const postRepo = new AstroPostRepository();
+const seriesRepo = new AstroSeriesRepository();
+
+const [suggestions, series] = await Promise.all([
+    postRepo.findSuggestions(post, 3),
+    post.seriesRef ? seriesRepo.findByPost(post) : Promise.resolve(undefined),
+]);
+
+const {Content} = await render(entry);
+---
+
+<PostLayout post={post} suggestions={suggestions} series={series}>
+    <Content/>
+</PostLayout>

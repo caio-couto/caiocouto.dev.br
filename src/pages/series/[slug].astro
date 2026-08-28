@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostGrid from "../../components/PostGrid.svelte";
+import {AstroSeriesRepository} from "../../infrastructure/repositories/AstroSeriesRepository.js";
+import {Slug as SlugVO} from "../../domain/value-objects/Slug.js";
+
+export async function getStaticPaths() {
+    const repo = new AstroSeriesRepository();
+    const allSeries = await repo.findAll();
+    return allSeries.map((series) => ({
+        params: {slug: series.slug.toString()},
+        props: {seriesSlug: series.slug.toString()},
+    }));
+}
+
+const {seriesSlug} = Astro.props;
+const repo = new AstroSeriesRepository();
+const series = await repo.findBySlug(SlugVO.from(seriesSlug));
+
+if (!series) return Astro.redirect("/page/1");
+---
+
+<BaseLayout title={`${series.title} — Séries`} description={series.description}>
+    <img src={series.cover.toImageSource().src} alt={series.title}/>
+    <h1>{series.title}</h1>
+    <p>{series.description}</p>
+    <PostGrid posts={series.posts}/>
+</BaseLayout>

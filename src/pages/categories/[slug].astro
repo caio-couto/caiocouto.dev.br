@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostGrid from "../../components/PostGrid.svelte";
+import {AstroCategoryRepository} from "../../infrastructure/repositories/AstroCategoryRepository.js";
+import {AstroPostRepository} from "../../infrastructure/repositories/AstroPostRepository.js";
+import {Slug as SlugVO} from "../../domain/value-objects/Slug.js";
+ 
+export async function getStaticPaths() {
+    const repo = new AstroCategoryRepository();
+    const categories = await repo.findAll();
+    return categories.map((cat) => ({
+        params: {slug: cat.slug.toString()},
+        props: {categorySlug: cat.slug.toString()},
+    }));
+}
+
+const {categorySlug} = Astro.props;
+
+const catRepo = new AstroCategoryRepository();
+const postRepo = new AstroPostRepository();
+
+const category = await catRepo.findBySlug(SlugVO.from(categorySlug));
+if (!category) return Astro.redirect("/page/1");
+
+const posts = await postRepo.findByCategory(category);
+---
+
+<BaseLayout title={`${category.name} — Categorias`}>
+    <h1>{category.name}</h1>
+    <PostGrid posts={posts}/>
+</BaseLayout>
