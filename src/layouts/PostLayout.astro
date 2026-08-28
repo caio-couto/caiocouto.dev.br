@@ -1,0 +1,44 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import type {Post} from "../domain/entities/Post.js";
+import type {Series} from "../domain/entities/Series.js";
+import SuggestionsGrid from "../components/SuggestionsGrid.svelte";
+import SeriesNav from "../components/SeriesNav.svelte";
+
+interface Props {
+    post: Post;
+    suggestions: Post[];
+    series?: Series;
+}
+
+const {post, suggestions, series} = Astro.props;
+const cover = post.cover.toImageSource();
+---
+
+<BaseLayout
+        title={post.title}
+        description={post.summary}
+        ogImage={cover.src}
+>
+    <article>
+        <img src={cover.src} alt={post.title} width={cover.width} height={cover.height}/>
+        <header>
+            <ul>
+                {post.categories.map((cat) => (
+                        <li><a href={`/categories/${cat.slug}`}>{cat.name}</a></li>
+                ))}
+            </ul>
+            <h1>{post.title}</h1>
+            <time datetime={post.publishedAt.toISOString()}>
+                {post.publishedAt.toLocaleDateString("pt-BR")}
+            </time>
+        </header>
+        <slot/>
+    </article>
+
+    {series && post.seriesRef && (
+            <SeriesNav series={series} currentPost={post}/>
+    )}
+
+    <SuggestionsGrid posts={suggestions}/>
+</BaseLayout>

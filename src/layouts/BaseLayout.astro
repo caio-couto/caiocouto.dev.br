@@ -1,0 +1,39 @@
+---
+import Header from "../components/Header.svelte";
+import Footer from "../components/Footer.svelte";
+
+interface Props {
+    title: string;
+    description?: string;
+    ogImage?: string;
+    currentPath?: string;
+}
+
+const {
+    title,
+    description = "Blog pessoal de Caio Couto",
+    ogImage = "/og-default.png",
+    currentPath = Astro.url.pathname,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{title}</title>
+    <meta name="description" content={description}/>
+    <meta property="og:title" content={title}/>
+    <meta property="og:description" content={description}/>
+    <meta property="og:image" content={ogImage}/>
+    <link rel="icon" href="/favicon.ico"/>
+</head>
+<body>
+<Header currentPath={currentPath}/>
+<main>
+    <slot/>
+</main>
+<Footer/>
+</body>
+</html>
