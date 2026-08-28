@@ -1,16 +1,110 @@
 <script lang="ts">
   import type {Series} from "../domain/entities/Series.js";
+  import CornerBox from "./CornerBox.svelte";
+  import type {ImageSource} from "../domain/value-objects/CoverImage.ts";
 
-  const {series}: { series: Series } = $props();
+  interface Props {
+        series: Series;
+    }
+
+    const {series}: Props = $props();
+    const cover: ImageSource = series.cover.toImageSource();
 </script>
 
-<article>
-    <a href={`/series/${series.slug}`}>
-        <img src={series.cover.toImageSource().src} alt={series.title}/>
-        <div>
-            <h2>{series.title}</h2>
-            <p>{series.description}</p>
-            <span>{series.posts.length} posts</span>
-        </div>
-    </a>
-</article>
+<CornerBox
+        tag="a"
+        href={`/series/${series.slug}`}
+        class="series-card"
+        color="var(--color-accent)"
+>
+    <img
+            src={cover.src}
+            alt={series.title}
+            width={cover.width}
+            height={cover.height}
+            class="series-card__cover"
+    />
+    <div class="series-card__body">
+        <h2 class="series-card__title">{series.title}</h2>
+        <p class="series-card__description">{series.description}</p>
+        {#if series.posts.length > 0}
+            <ul class="series-card__episodes">
+                {#each series.posts as post}
+                    <li class="series-card__episode">
+                        <span class="series-card__episode-arrow" aria-hidden="true">→</span>
+                        {post.title}
+                    </li>
+                {/each}
+            </ul>
+        {/if}
+    </div>
+</CornerBox>
+
+<style>
+    :global(.series-card) {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-surface);
+        border: var(--border-width) solid var(--color-accent);
+        text-decoration: none;
+        color: var(--color-text);
+        width: 20rem;
+        flex-shrink: 0;
+        transition: opacity 0.15s ease;
+    }
+
+    :global(.series-card:hover) {
+        opacity: 0.85;
+    }
+
+    .series-card__cover {
+        width: 100%;
+        height: 13.125rem;
+        object-fit: cover;
+        object-position: top;
+        background-color: #000;
+        display: block;
+    }
+
+    .series-card__body {
+        padding: var(--space-6);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .series-card__title {
+        margin: 0;
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-bold);
+    }
+
+    .series-card__description {
+        margin: 0;
+        font-size: var(--font-size-sm);
+        color: var(--color-text-muted);
+        line-height: var(--line-height-normal);
+    }
+
+    .series-card__episodes {
+        border-top: var(--border-width) solid var(--color-border);
+        padding-top: var(--space-3);
+        margin-top: var(--space-2);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        font-size: var(--font-size-sm);
+        color: var(--color-text-muted);
+    }
+
+    .series-card__episode {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-2);
+    }
+
+    .series-card__episode-arrow {
+        color: var(--color-accent);
+        flex-shrink: 0;
+    }
+</style>
