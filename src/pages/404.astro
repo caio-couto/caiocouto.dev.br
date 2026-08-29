@@ -1,0 +1,137 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const ascii = `#*#*#*#*##              #*#*#*#*#*#*#*#*#*#*#*#*#                             #*#*#*#*##
+                                  ##*###*#*#              ##*###*###*###*###*###*##                             #*##*###*#
+                             #**#*     #*#*#         ***#*                         **#*+                   **#*#     *#*##
+                             ##*##     #*##*         +##*#                         ##*#+                   ##*#*     #*#*#
+                             #*#*#     #*#*#         +*##*                         *##*+                   #*###     #*###
+                        #*###          #*##*         +#*##     #*##*     #*##*     #*##+              #*###          #*#*#
+                        #*#*#          #*#*#         +#*#*     #*#*#     #*#*#     #*#*+              #*#*#          #*#*#
+                        ##*#*          #*##*         +#*##     *#*#*     #*###     #*##+              #*#*#          #*###
+                   ##*##               #*#*#         +#*#*                         #*#*+         #*#*#               #*#*#
+                   #*#*#               #*##*         +#*##                         #*##+         #*##*               #*#*#
+              .##*#*#*#*#*#*#*#*#*#*#*#*#*##*#*#*    +#*#*     #*#*#*#*#*#*#*#     #*#*+    *#*#*##*##*#*#*#*#*#*#*#*##*#*#*#*:
+              .#*###*###*###*###*###*###*#*##*#**    +#*##     #*##*###*###*#*     #*##+    *##*#*#*#*###*###*###*###*##*###*#:
+              .##*#*#*#*#*#*#*#*#*#*#*#*#*#*##*#*    +#*#*     #*#*#*#*#*#*###     #*#*+    *#*#*#*#*#*#*#*#*#*#*#*#*#*##*#*#*:
+                                       #*#*#         +#*##                         #*##+                             #*#*#
+                                       #*##*         +#*#*                         #*#*+                             #*#*#
+                                       #*#*#         +***#                         ***#+                             #*###
+                                       #*##*              #*#*#*#*#*#*#*#*#*#*#*#*#                                  #*#*#
+                                       #*#*#              ##*###*###*###*###*###*##                                  #*#*#`;
+---
+
+<BaseLayout title="404 — Página não encontrada" description="Esta página não existe.">
+    <div class="not-found">
+        <pre class="not-found__ascii" aria-hidden="true">{ascii}</pre>
+        <div class="not-found__body">
+            <p class="not-found__code">404</p>
+            <h1 class="not-found__title">Página não encontrada</h1>
+            <p class="not-found__desc">
+                O pacote chegou, mas o destino não existe.<br/>
+                Talvez o endereço tenha mudado, ou nunca existiu.
+            </p>
+            <a href="/" class="not-found__btn">
+                <span class="not-found__btn-corner not-found__btn-corner--tl" aria-hidden="true">+</span>
+                <span class="not-found__btn-corner not-found__btn-corner--tr" aria-hidden="true">+</span>
+                Voltar ao início
+                <span class="not-found__btn-corner not-found__btn-corner--bl" aria-hidden="true">+</span>
+                <span class="not-found__btn-corner not-found__btn-corner--br" aria-hidden="true">+</span>
+            </a>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .not-found {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: var(--space-18) var(--layout-page-pad) var(--space-30);
+        gap: var(--space-12);
+        min-height: 80vh;
+        justify-content: center;
+    }
+
+    .not-found__ascii {
+        font-size: 4px;
+        line-height: 1.4;
+        color: var(--color-border);
+        white-space: pre;
+        overflow: hidden;
+        user-select: none;
+        letter-spacing: 0;
+    }
+
+    .not-found__body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: var(--space-4);
+    }
+
+    .not-found__code {
+        margin: 0;
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-accent);
+        letter-spacing: var(--letter-spacing-tight);
+        line-height: 1;
+    }
+
+    .not-found__title {
+        margin: 0;
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text);
+    }
+
+    .not-found__desc {
+        margin: 0;
+        font-size: var(--font-size-base);
+        color: var(--color-text-muted);
+        line-height: var(--line-height-normal);
+    }
+
+    .not-found__btn {
+        position: relative;
+        display: inline-block;
+        margin-top: var(--space-4);
+        padding: var(--space-3) var(--space-6);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        font-family: var(--font-family-mono), monospace;
+        text-decoration: none;
+        border: var(--border-width-dash) dashed var(--color-accent);
+        color: var(--color-accent);
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .not-found__btn:hover {
+        background-color: var(--color-accent);
+        color: var(--color-bg);
+    }
+
+    .not-found__btn-corner {
+        position: absolute;
+        font-size: var(--corner-size);
+        line-height: 1;
+        background-color: var(--color-bg);
+        padding: 0 var(--space-1);
+        font-family: var(--font-family-mono), monospace;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .not-found__btn-corner--tl { top: var(--corner-offset); left: var(--corner-offset); }
+    .not-found__btn-corner--tr { top: var(--corner-offset); right: var(--corner-offset); }
+    .not-found__btn-corner--bl { bottom: var(--corner-offset); left: var(--corner-offset); }
+    .not-found__btn-corner--br { bottom: var(--corner-offset); right: var(--corner-offset); }
+
+    @media (max-width: 47.9375rem) {
+        .not-found__ascii {
+            display: none;
+        }
+    }
+</style>
