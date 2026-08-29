@@ -1,29 +1,32 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+    import type {Snippet} from "svelte";
 
-  interface Props {
-    color?: string;
-    tag?: string;
-    class?: string;
-    style?: string;
-    children?: Snippet;
-    [key: string]: unknown;
-  }
+    interface Props {
+        color?: string;
+        bgColor?: string;
+        tag?: string;
+        class?: string;
+        style?: string;
+        children?: Snippet;
 
-  const {
-    color = "var(--color-border)",
-    tag = "div",
-    class: className = "",
-    style: inlineStyle = "",
-    children,
-    ...attrs
-  }: Props = $props();
+        [key: string]: unknown;
+    }
+
+    const {
+        color = "var(--color-border)",
+        bgColor = "var(--color-bg)",
+        tag = "div",
+        class: className = "",
+        style: inlineStyle = "",
+        children,
+        ...attrs
+    }: Props = $props();
 </script>
 
 <svelte:element
         this={tag}
         class={`corner-box ${className}`}
-        style={`--_corner-color:${color};${inlineStyle}`}
+        style={`--_corner-color:${color};--_corner-bg:${bgColor};${inlineStyle}`}
         {...attrs}
 >
     <span class="corner-box__marker corner-box__marker--tl" aria-hidden="true">+</span>
@@ -40,15 +43,16 @@
 
     .corner-box__marker {
         position: absolute;
-        color: var(--_corner-color);
+        color: var(--color-text);
         font-size: var(--corner-size);
         line-height: 1;
-        background-color: var(--color-bg);
+        background-color: var(--_corner-bg);
         padding: 0 var(--space-1);
         z-index: 2;
         font-family: var(--font-family-mono), monospace;
         pointer-events: none;
         user-select: none;
+        transition: color 0.15s ease;
     }
 
     .corner-box__marker--tl {

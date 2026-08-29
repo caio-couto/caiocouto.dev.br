@@ -15,7 +15,7 @@
         tag="a"
         href={`/series/${series.slug}`}
         class="series-card"
-        color="var(--color-accent)"
+        color="var(--color-text-muted)"
 >
     <img
             src={cover.src}
@@ -45,21 +45,25 @@
         display: flex;
         flex-direction: column;
         background-color: var(--color-surface);
-        border: var(--border-width) solid var(--color-accent);
+        border: var(--border-width-dash) dashed var(--color-text);
         text-decoration: none;
         color: var(--color-text);
         width: 20rem;
         flex-shrink: 0;
-        transition: opacity 0.15s ease;
+        transition: border-color 0.15s ease;
     }
 
     :global(.series-card:hover) {
-        opacity: 0.85;
+        border-color: var(--color-accent);
+    }
+
+    :global(.series-card:hover .corner-box__marker) {
+        color: var(--color-accent);
     }
 
     .series-card__cover {
         width: 100%;
-        height: 13.125rem;
+        height: var(--cover-height-card);
         object-fit: cover;
         object-position: top;
         background-color: #000;

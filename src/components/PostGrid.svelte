@@ -20,15 +20,27 @@
 <style>
     .post-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(16.25rem, 1fr));
+        grid-template-columns: repeat(3, 1fr);
         gap: var(--space-6);
     }
 
     .post-grid__item {
         display: flex;
     }
-
+ 
     .post-grid__item :global(.post-card) {
         width: 100%;
+    }
+
+    @media (max-width: 60rem) {
+        .post-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 40rem) {
+        .post-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

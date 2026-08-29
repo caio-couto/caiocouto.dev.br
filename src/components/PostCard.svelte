@@ -42,7 +42,7 @@
         display: flex;
         flex-direction: column;
         background-color: var(--color-surface);
-        border: var(--border-width) solid var(--color-border);
+        border: var(--border-width-dash) dashed var(--color-text);
         text-decoration: none;
         color: var(--color-text);
         transition: border-color 0.15s ease;
@@ -52,9 +52,13 @@
         border-color: var(--color-accent);
     }
 
+    :global(.post-card:hover .corner-box__marker) {
+        color: var(--color-accent);
+    }
+
     .post-card__cover {
         width: 100%;
-        height: 11.25rem;
+        height: var(--cover-height-card);
         object-fit: cover;
         border-bottom: var(--border-width) solid var(--color-border);
     }

@@ -1,90 +1,117 @@
 /* ============================================================
-   TOKENS — cores, espaçamento, tipografia
-   Nunca use valores literais nos componentes; use tokens.
+   TOKENS: cores, espaçamento, tipografia
    ============================================================ */
 
-/* Tipografia */
 :root {
-  --font-family-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: 16px;
 
-  --font-size-2xs:  11px;
-  --font-size-xs:   12px;
-  --font-size-sm:   13px;
-  --font-size-base: 16px;
-  --font-size-md:   18px;
-  --font-size-lg:   20px;
-  --font-size-xl:   24px;
-  --font-size-2xl:  34px;
-  --font-size-3xl:  38px;
-  --font-size-4xl:  52px;
+    --font-family-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
-  --font-weight-normal:   400;
-  --font-weight-medium:   500;
-  --font-weight-semibold: 600;
-  --font-weight-bold:     700;
+    /* Tipografia */
+    --font-size-2xs: 0.6875rem; /* 11px */
+    --font-size-xs: 0.75rem; /* 12px */
+    --font-size-sm: 0.8125rem; /* 13px */
+    --font-size-base: 1rem; /* 16px */
+    --font-size-md: 1.125rem; /* 18px */
+    --font-size-lg: 1.25rem; /* 20px */
+    --font-size-xl: 1.5rem; /* 24px */
+    --font-size-2xl: 2.125rem; /* 34px */
+    --font-size-3xl: 2.375rem; /* 38px */
+    --font-size-4xl: 3.25rem; /* 52px */
 
-  --line-height-tight:   1.08;
-  --line-height-snug:    1.25;
-  --line-height-normal:  1.6;
-  --line-height-relaxed: 1.75;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
 
-  --letter-spacing-tight:  -0.5px;
-  --letter-spacing-normal:  0.3px;
-  --letter-spacing-wide:    1px;
-  --letter-spacing-wider:   1.5px;
+    --line-height-tight: 1.08;
+    --line-height-snug: 1.25;
+    --line-height-normal: 1.6;
+    --line-height-relaxed: 1.75;
 
-  /* Espaçamento (base 4px) */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  20px;
-  --space-6:  24px;
-  --space-8:  32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-14: 56px;
-  --space-16: 64px;
-  --space-18: 72px;
-  --space-20: 80px;
-  --space-24: 96px;
-  --space-30: 120px;
+    --letter-spacing-tight: -0.03125em; /* -0.5px at 16px */
+    --letter-spacing-normal: 0.01875em; /* 0.3px at 16px */
+    --letter-spacing-wide: 0.0625em; /* 1px at 16px */
+    --letter-spacing-wider: 0.09375em; /* 1.5px at 16px */
 
-  /* Layout */
-  --layout-content-max:  720px;
-  --layout-wide-max:    1120px;
-  --layout-page-pad:    var(--space-10);
+    /* Espaçamento (base 0.25rem = 4px) */
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem; /* 8px */
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem; /* 16px */
+    --space-5: 1.25rem; /* 20px */
+    --space-6: 1.5rem; /* 24px */
+    --space-8: 2rem; /* 32px */
+    --space-10: 2.5rem; /* 40px */
+    --space-12: 3rem; /* 48px */
+    --space-14: 3.5rem; /* 56px */
+    --space-16: 4rem; /* 64px */
+    --space-18: 4.5rem; /* 72px */
+    --space-20: 5rem; /* 80px */
+    --space-24: 6rem; /* 96px */
+    --space-30: 7.5rem; /* 120px */
 
-  /* Bordas */
-  --border-width: 1px;
-  --border-radius: 0;
-  --corner-offset: -7px;
-  --corner-size: var(--font-size-sm);
+    /* Layout */
+    --layout-content-max: 45rem; /* 720px */
+    --layout-wide-max: 70rem; /* 1120px */
+    --layout-page-pad: var(--space-10);
+
+    /* Imagens */
+    --cover-height-card: 11.25rem; /* 180px PostCard e SeriesCard */
+    --cover-height-post: 18rem; /* 288px hero do post */
+
+    /* Bordas */
+    --border-width: 1px;
+    --border-width-dash: 2px;
+    --border-radius: 0;
+    --corner-offset: -0.6875rem; /* -11px */
+    --corner-size: var(--font-size-lg);
 }
 
-/* Cores — tema escuro (padrão) */
+@media (max-width: 47.9375rem) {
+    :root {
+        --font-size-4xl: 2rem;
+        --font-size-3xl: 1.625rem;
+        --font-size-2xl: 1.375rem;
+        --font-size-xl: 1.25rem;
+        --font-size-md: 1rem;
+
+        --space-10: 1.5rem;
+        --space-12: 2rem;
+        --space-14: 2.5rem;
+        --space-16: 3rem;
+        --space-18: 3.5rem;
+        --space-20: 4rem;
+        --space-24: 4.5rem;
+        --space-30: 5rem;
+
+        --layout-page-pad: var(--space-5);
+    }
+}
+
+/* Cores tema escuro (padrão) */
 :root,
 [data-theme="dark"] {
-  --color-bg:           #282828;
-  --color-surface:      #3c3836;
-  --color-border:       #504945;
-  --color-text:         #ebdbb2;
-  --color-text-muted:   #a89984;
-  --color-accent:       #fe8019;
-  --color-accent-hover: #fabd2f;
-  --color-link:         #83a598;
-  --color-tag:          #d3869b;
+    --color-bg: #282828;
+    --color-surface: #3c3836;
+    --color-border: #504945;
+    --color-text: #ebdbb2;
+    --color-text-muted: #a89984;
+    --color-accent: #fe8019;
+    --color-accent-hover: #fabd2f;
+    --color-link: #83a598;
+    --color-tag: #d3869b;
 }
 
-/* Cores — tema claro */
+/* Cores tema claro */
 [data-theme="light"] {
-  --color-bg:           #fbf1c7;
-  --color-surface:      #ebdbb2;
-  --color-border:       #d5c4a1;
-  --color-text:         #3c3836;
-  --color-text-muted:   #7c6f64;
-  --color-accent:       #af3a03;
-  --color-accent-hover: #9d3902;
-  --color-link:         #076678;
-  --color-tag:          #8f3f71;
+    --color-bg: #fbf1c7;
+    --color-surface: #ebdbb2;
+    --color-border: #d5c4a1;
+    --color-text: #3c3836;
+    --color-text-muted: #7c6f64;
+    --color-accent: #af3a03;
+    --color-accent-hover: #9d3902;
+    --color-link: #076678;
+    --color-tag: #8f3f71;
 }
