@@ -4,15 +4,17 @@ import type {Post} from "../domain/entities/Post.js";
 import type {Series} from "../domain/entities/Series.js";
 import SuggestionsGrid from "../components/SuggestionsGrid.svelte";
 import SeriesNav from "../components/SeriesNav.svelte";
+import PostGrid from "../components/PostGrid.svelte";
 import type {ImageSource} from "../domain/value-objects/CoverImage.ts";
 
 interface Props {
     post: Post;
     suggestions: Post[];
+    allPosts: Post[];
     series?: Series;
 }
 
-const {post, suggestions, series} = Astro.props;
+const {post, suggestions, allPosts, series} = Astro.props;
 const cover: ImageSource = post.cover.toImageSource();
 const dateStr: string = post.publishedAt.toLocaleDateString("pt-BR", {
     day: "2-digit",
@@ -68,6 +70,11 @@ const dateStr: string = post.publishedAt.toLocaleDateString("pt-BR", {
     <div class="post-suggestions">
         <SuggestionsGrid posts={suggestions}/>
     </div>
+
+    <div class="post-all-posts">
+        <h2 class="post-all-posts__label">Todos os artigos</h2>
+        <PostGrid posts={allPosts}/>
+    </div>
 </BaseLayout>
 
 <style>
@@ -86,7 +93,22 @@ const dateStr: string = post.publishedAt.toLocaleDateString("pt-BR", {
     .post-suggestions {
         max-width: var(--layout-wide-max);
         margin: 0 auto;
+        padding: 0 var(--layout-page-pad) var(--space-12);
+    }
+
+    .post-all-posts {
+        max-width: var(--layout-wide-max);
+        margin: 0 auto;
         padding: 0 var(--layout-page-pad) var(--space-30);
+    }
+
+    .post-all-posts__label {
+        margin: 0 0 var(--space-4);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-normal);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        color: var(--color-accent);
     }
 
     .post__cover-wrap {

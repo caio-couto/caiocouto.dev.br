@@ -19,14 +19,15 @@ const post = PostMapper.toDomain(entry);
 const postRepo = new AstroPostRepository();
 const seriesRepo = new AstroSeriesRepository();
 
-const [suggestions, series] = await Promise.all([
+const [suggestions, allPosts, series] = await Promise.all([
     postRepo.findSuggestions(post, 3),
+    postRepo.findAll().then((posts) => posts.filter((p) => p.slug.toString() !== post.slug.toString())),
     post.seriesRef ? seriesRepo.findByPost(post) : Promise.resolve(undefined),
 ]);
 
 const {Content} = await render(entry);
 ---
 
-<PostLayout post={post} suggestions={suggestions} series={series}>
+<PostLayout post={post} suggestions={suggestions} allPosts={allPosts} series={series}>
     <Content/>
 </PostLayout>
