@@ -12,7 +12,7 @@ interface Props {
 const {
     title,
     description = "Blog pessoal de Caio Couto",
-    ogImage = "/og-default.png",
+    ogImage = "/ascii-caio.png",
 } = Astro.props;
 ---
 
@@ -76,7 +76,7 @@ const {
             menuOpen = false;
             headerNav.style.display = "";
             menuBtn.setAttribute("aria-expanded", "false");
-            
+
             if (menuIcon) menuIcon.textContent = "☰";
         }
 
