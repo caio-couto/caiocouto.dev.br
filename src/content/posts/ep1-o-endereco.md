@@ -27,6 +27,17 @@ padrão C que aceita um nome de host e devolve, ao final de um caminho que pode 
 estrutura contendo o endereço IP do destino:
 
 ```c
+/* struct addrinfo {
+    int              ai_flags;     // opções extras (AI_CANONNAME, AI_PASSIVE, ...)
+    int              ai_family;    // AF_INET, AF_INET6 ou AF_UNSPEC
+    int              ai_socktype;  // SOCK_STREAM (TCP) ou SOCK_DGRAM (UDP)
+    int              ai_protocol;  // IPPROTO_TCP, IPPROTO_UDP ou 0
+    socklen_t        ai_addrlen;   // tamanho de *ai_addr
+    struct sockaddr *ai_addr;      // endereço completo: família + porta + IP
+    char            *ai_canonname; // nome canônico do host (se AI_CANONNAME)
+    struct addrinfo *ai_next;      // próximo resultado na lista (NULL = fim)
+}; */
+
 int getaddrinfo(const char *node,
                 const char *service,
                 const struct addrinfo *hints,
