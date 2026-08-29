@@ -28,9 +28,10 @@ entender o que ela faz. A maioria dos cursos, tutoriais e documentações ensina
 obsessão com o segundo.
 
 Desde cedo no ofício, percebi que descer um nível abaixo do que era necessário para a tarefa me tornava um programador
-melhor no nível de cima. Entender como o TCP gerencia a janela de congestionamento me fez escrever código de rede mais
-cuidadoso. Entender o Event Loop do Node.js me fez parar de escrever código que travava servidores em produção sem saber
-por quê. O conhecimento de baixo nível não é trivia acadêmica: ele aparece, cedo ou tarde, nos problemas reais.
+melhor no nível de cima. Entender como o TCP gerencia a janela de congestionamento me fez escrever código de aplicações
+web mais robusta. Entender o Event Loop do Node.js me fez parar de escrever código que travava servidores em produção
+sem saber por quê. O conhecimento de baixo nível não é trivia acadêmica: ele aparece, cedo ou tarde, nos problemas
+reais.
 
 O caminho até aqui foi feito de leitura. W. Richard Stevens e seus volumes sobre TCP/IP e programação Unix, que
 documentam com uma clareza rara o que acontece desde o `accept()` até o `recv()`. Rami Rosen e o interior da stack de
@@ -51,7 +52,7 @@ A forma veio de uma fonte inesperada. Quando criança, assisti aos vídeos de Ca
 não foi somente a astronomia em si, a qual eu tanto gostava, foi o método: Sagan pegava algo imenso e incompreensível e
 te colocava dentro dele. Não como observador externo lendo uma descrição, mas como viajante dentro do fenômeno. Eu
 entendia a escala do universo não porque alguém me disse que era grande, mas porque Sagan me mostrou o que significa
-estar dentro de uma galáxia olhando para outra.
+estar numa galáxia olhando para outra.
 
 A computação, descobri, tem a mesma qualidade. Uma requisição HTTP é pequena demais para ser vista, rápida demais para
 ser percebida, e complexa o suficiente para esconder um universo inteiro de decisões de engenharia. O método de Sagan se
