@@ -1,6 +1,6 @@
 <footer class="footer">
     <p class="footer__copy">
-        © {new Date().getFullYear()} Caio Couto ·
+        © {new Date().getFullYear()} ASCII Caio ·
         <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="footer__link">CC BY-SA 4.0</a>
     </p>
     <nav class="footer__nav">

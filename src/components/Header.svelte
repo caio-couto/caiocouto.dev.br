@@ -1,5 +1,5 @@
 <header class="header">
-    <a href="/" class="header__brand">Caio Couto</a>
+    <a href="/" class="header__brand">ASCII Caio</a>
 
     <button
             class="header__menu-btn"
