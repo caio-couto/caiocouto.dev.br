@@ -1,4 +1,5 @@
 ---
+import "../styles/global.css";
 import Header from "../components/Header.svelte";
 import Footer from "../components/Footer.svelte";
 
@@ -6,14 +7,12 @@ interface Props {
     title: string;
     description?: string;
     ogImage?: string;
-    currentPath?: string;
 }
 
 const {
     title,
     description = "Blog pessoal de Caio Couto",
     ogImage = "/og-default.png",
-    currentPath = Astro.url.pathname,
 } = Astro.props;
 ---
 
@@ -22,18 +21,79 @@ const {
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="color-scheme" content="dark light"/>
     <title>{title}</title>
     <meta name="description" content={description}/>
     <meta property="og:title" content={title}/>
     <meta property="og:description" content={description}/>
     <meta property="og:image" content={ogImage}/>
     <link rel="icon" href="/favicon.ico"/>
+    <script is:inline>
+        (function () {
+            const t = localStorage.getItem("theme") || "dark";
+            document.documentElement.setAttribute("data-theme", t);
+        })();
+    </script>
 </head>
 <body>
-<Header currentPath={currentPath}/>
-<main>
+<Header/>
+<main class="layout__main">
     <slot/>
 </main>
 <Footer/>
+<script is:inline>
+    document.addEventListener("click", function (e) {
+        if (!e.target.closest("[data-theme-toggle]")) return;
+
+        const cur = document.documentElement.getAttribute("data-theme") || "dark";
+        const next = cur === "dark" ? "light" : "dark";
+
+        document.documentElement.setAttribute("data-theme", next);
+
+        localStorage.setItem("theme", next);
+
+        document.querySelectorAll("[data-theme-label]").forEach(function (el) {
+            el.textContent =
+                next === "dark" ? "[ modo claro ]" : "[ modo escuro ]";
+        });
+    });
+
+    const menuBtn = document.querySelector("[data-menu-toggle]");
+    const headerNav = document.getElementById("header-nav");
+    const menuIcon = menuBtn && menuBtn.querySelector(".header__menu-icon");
+
+    if (menuBtn && headerNav) {
+        var menuOpen = false;
+
+        function openMenu() {
+            menuOpen = true;
+            headerNav.style.display = "flex";
+            menuBtn.setAttribute("aria-expanded", "true");
+            if (menuIcon) menuIcon.textContent = "✕";
+        }
+
+        function closeMenu() {
+            menuOpen = false;
+            headerNav.style.display = "";
+            menuBtn.setAttribute("aria-expanded", "false");
+            
+            if (menuIcon) menuIcon.textContent = "☰";
+        }
+
+        menuBtn.addEventListener("click", function () {
+            menuOpen ? closeMenu() : openMenu();
+        });
+
+        headerNav.querySelectorAll(".header__nav-link").forEach(function (link) {
+            link.addEventListener("click", closeMenu);
+        });
+    }
+</script>
 </body>
 </html>
+
+<style>
+    .layout__main {
+        min-height: calc(100vh - 140px);
+    }
+</style>

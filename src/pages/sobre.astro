@@ -1,0 +1,103 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Sobre — Caio Couto">
+    <div class="sobre">
+        <div class="sobre__header">
+            <p class="sobre__label">Sobre</p>
+            <h1 class="sobre__title">Caio Couto</h1>
+        </div>
+
+        <div class="sobre__prose">
+            <p>
+                Sou desenvolvedor de software. Não o tipo que copia tutorial do Stack
+                Overflow e vai embora feliz (as vezes eu sou), o tipo que gosta de entender <em>por quê </em>
+                aquilo funciona antes de conseguir dormir.
+            </p>
+            <p>
+                Quando você chama <code>malloc()</code>, alguém está fazendo um trabalho
+                sujo por você. Quando seu banco de dados "magicamente" persiste dados,
+                tem um journal, um fsync e uma série de decisões de engenharia fascinantes
+                acontecendo sem o seu consentimento. Eu acho isso <em>genuinamente empolgante</em>.
+                Se você acha estranho, fique. Talvez eu te convença.
+            </p>
+            <p>
+                Escrevo sobre sistemas operacionais, redes, linguagens e as decisões de
+                arquitetura, as quais enfrento no meu dia-a-dia, e continuamente aprendendo
+                sobre.
+            </p>
+
+            <h2>Contato</h2>
+            <p>
+                Se você leu até aqui e já não se cansou, provavelmente temos coisas
+                a discutir. Me acha no
+                <a href="https://github.com/caiocouto" target="_blank" rel="noopener"> GitHub </a>
+                ou manda um
+                <a href="mailto:cavalcantecaio.couto@gmail.com"> e-mail </a>.
+                Respondo e-mails de humanos. Filtro agressivo para o resto.
+            </p>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .sobre {
+        max-width: var(--layout-content-max);
+        margin: 0 auto;
+        padding: var(--space-18) var(--layout-page-pad) var(--space-30);
+    }
+
+    .sobre__header {
+        margin-bottom: var(--space-10);
+        border-bottom: var(--border-width) solid var(--color-border);
+        padding-bottom: var(--space-8);
+    }
+
+    .sobre__label {
+        margin: 0 0 var(--space-2);
+        font-size: var(--font-size-sm);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        color: var(--color-accent);
+    }
+
+    .sobre__title {
+        margin: 0;
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-text);
+    }
+
+    .sobre__prose {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-6);
+        line-height: var(--line-height-normal);
+        color: var(--color-text);
+    }
+
+    .sobre__prose p {
+        margin: 0;
+    }
+
+    .sobre__prose h2 {
+        margin: var(--space-8) 0 0;
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text);
+    }
+
+    .sobre__prose h2::before {
+        content: "## ";
+        color: var(--color-accent);
+    }
+
+    .sobre__prose a {
+        color: var(--color-link);
+    }
+
+    .sobre__prose a:hover {
+        color: var(--color-accent);
+    }
+</style>

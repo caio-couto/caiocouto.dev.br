@@ -3,26 +3,110 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostGrid from "../../components/PostGrid.svelte";
 import {AstroSeriesRepository} from "../../infrastructure/repositories/AstroSeriesRepository.js";
 import {Slug as SlugVO} from "../../domain/value-objects/Slug.js";
+import type {Series} from "../../domain/entities/Series.ts";
+import type {ImageSource} from "../../domain/value-objects/CoverImage.ts";
 
 export async function getStaticPaths() {
     const repo = new AstroSeriesRepository();
-    const allSeries = await repo.findAll();
-    return allSeries.map((series) => ({
-        params: {slug: series.slug.toString()},
-        props: {seriesSlug: series.slug.toString()},
+    const allSeries: Series[] = await repo.findAll();
+
+    return allSeries.map((s) => ({
+        params: {slug: s.slug.toString()},
+        props: {seriesSlug: s.slug.toString()},
     }));
 }
 
 const {seriesSlug} = Astro.props;
 const repo = new AstroSeriesRepository();
-const series = await repo.findBySlug(SlugVO.from(seriesSlug));
+const series: Series | undefined = await repo.findBySlug(SlugVO.from(seriesSlug));
 
 if (!series) return Astro.redirect("/page/1");
+
+const cover: ImageSource = series.cover.toImageSource();
 ---
 
 <BaseLayout title={`${series.title} — Séries`} description={series.description}>
-    <img src={series.cover.toImageSource().src} alt={series.title}/>
-    <h1>{series.title}</h1>
-    <p>{series.description}</p>
-    <PostGrid posts={series.posts}/>
+    <div class="series-page">
+        <div class="series-page__header">
+            <div class="series-page__cover-wrap">
+                <img
+                        src={cover.src}
+                        alt={series.title}
+                        width={cover.width}
+                        height={cover.height}
+                        class="series-page__cover"
+                />
+            </div>
+            <p class="series-page__meta">
+                Série · {series.posts.length} artigo{series.posts.length !== 1 ? "s" : ""} · por Caio Couto
+            </p>
+            <h1 class="series-page__title">{series.title}</h1>
+            <p class="series-page__description">{series.description}</p>
+        </div>
+        <div class="series-page__episodes">
+            <h2 class="series-page__episodes-label">Artigos</h2>
+            <PostGrid posts={series.posts}/>
+        </div>
+    </div>
 </BaseLayout>
+
+<style>
+    .series-page {
+        padding: var(--space-18) 0 var(--space-30);
+    }
+
+    .series-page__header {
+        max-width: var(--layout-content-max);
+        margin: 0 auto;
+        padding: 0 var(--layout-page-pad) var(--space-14);
+    }
+
+    .series-page__cover-wrap {
+        margin-bottom: var(--space-10);
+        overflow: hidden;
+        background-color: #000;
+    }
+
+    .series-page__cover {
+        width: 100%;
+        height: var(--cover-height-post);
+        object-fit: cover;
+        display: block;
+    }
+
+    .series-page__meta {
+        margin: 0 0 var(--space-2);
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+    }
+
+    .series-page__title {
+        margin: 0 0 var(--space-4);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-snug);
+        color: var(--color-text);
+    }
+
+    .series-page__description {
+        margin: 0;
+        font-size: var(--font-size-base);
+        color: var(--color-text);
+        line-height: var(--line-height-normal);
+    }
+
+    .series-page__episodes {
+        max-width: var(--layout-wide-max);
+        margin: 0 auto;
+        padding: 0 var(--layout-page-pad);
+    }
+
+    .series-page__episodes-label {
+        margin: 0 0 var(--space-5);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-normal);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        color: var(--color-accent);
+    }
+</style>

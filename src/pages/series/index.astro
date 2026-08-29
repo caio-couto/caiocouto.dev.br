@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SeriesCard from "../../components/SeriesCard.svelte";
+import {AstroSeriesRepository} from "../../infrastructure/repositories/AstroSeriesRepository.js";
+import type {Series} from "../../domain/entities/Series.ts";
+
+const repo = new AstroSeriesRepository();
+const allSeries: Series[] = await repo.findAll();
+---
+
+<BaseLayout title="Séries — Caio Couto">
+    <div class="series-list-page">
+        <div class="series-list-page__header">
+            <p class="series-list-page__label">Séries</p>
+            <h1 class="series-list-page__title">Conteúdo em série</h1>
+            <p class="series-list-page__desc">
+                Para te ajudar a se encontrar.
+            </p>
+        </div>
+
+        <ul class="series-list-page__grid">
+            {allSeries.map((series) => (
+                    <li>
+                        <SeriesCard {series}/>
+                    </li>
+            ))}
+        </ul>
+    </div>
+</BaseLayout>
+
+<style>
+    .series-list-page {
+        max-width: var(--layout-wide-max);
+        margin: 0 auto;
+        padding: var(--space-18) var(--layout-page-pad) var(--space-30);
+    }
+
+    .series-list-page__header {
+        margin-bottom: var(--space-12);
+        border-bottom: var(--border-width) solid var(--color-border);
+        padding-bottom: var(--space-8);
+    }
+
+    .series-list-page__label {
+        margin: 0 0 var(--space-2);
+        font-size: var(--font-size-sm);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        color: var(--color-accent);
+    }
+
+    .series-list-page__title {
+        margin: 0 0 var(--space-3);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-text);
+    }
+
+    .series-list-page__desc {
+        margin: 0;
+        font-size: var(--font-size-base);
+        color: var(--color-text-muted);
+    }
+
+    .series-list-page__grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-8);
+    }
+
+    .series-list-page__grid li {
+        display: flex;
+    }
+
+    .series-list-page__grid li :global(.series-card) {
+        width: 100%;
+    }
+
+    @media (max-width: 60rem) {
+        .series-list-page__grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 40rem) {
+        .series-list-page__grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

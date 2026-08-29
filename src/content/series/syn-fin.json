@@ -1,0 +1,5 @@
+{
+  "title": "Entre o SYN e o FIN",
+  "description": "Um narrador onisciente acompanha um pacote HTTP do momento em que o usuário pressiona Enter até a resposta renderizada no browser. O detalhamento é a nível de kernel Linux, protocolos de rede e internos do Node.js.",
+  "cover": "../../assets/series/syn-fin.png"
+}

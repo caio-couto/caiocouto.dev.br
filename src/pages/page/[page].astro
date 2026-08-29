@@ -1,24 +1,28 @@
 ---
+import {readFileSync} from "fs";
+import {resolve} from "path";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostGrid from "../../components/PostGrid.svelte";
 import SeriesGrid from "../../components/SeriesGrid.svelte";
 import Pagination from "../../components/Pagination.svelte";
+import AsciiCard from "../../components/AsciiCard.svelte";
 import {AstroPostRepository} from "../../infrastructure/repositories/AstroPostRepository.js";
 import {AstroSeriesRepository} from "../../infrastructure/repositories/AstroSeriesRepository.js";
+import type {Post} from "../../domain/entities/Post.ts";
 
 export async function getStaticPaths() {
     const postRepo = new AstroPostRepository();
-    const pageSize = 9;
-    const allPosts = await postRepo.findAll();
-    const totalPages = Math.max(1, Math.ceil(allPosts.length / pageSize));
+    const pageSize: number = 6;
+    const allPosts: Post[] = await postRepo.findAll();
+    const totalPages: number = Math.max(1, Math.ceil(allPosts.length / pageSize));
 
     return Array.from({length: totalPages}, (_, i) => ({
         params: {page: String(i + 1)},
-        props: {pageNumber: i + 1, pageSize, totalPages},
+        props: {pageNumber: i + 1, pageSize},
     }));
 }
 
-const {pageNumber, pageSize, totalPages} = Astro.props;
+const {pageNumber, pageSize} = Astro.props;
 
 const postRepo = new AstroPostRepository();
 const seriesRepo = new AstroSeriesRepository();
@@ -27,15 +31,329 @@ const [paginatedPosts, allSeries] = await Promise.all([
     postRepo.paginate(pageNumber, pageSize),
     seriesRepo.findAll(),
 ]);
+
+const asciiDir = resolve("src/assets/ascii");
+const asciiCards = [
+    {label: "Terraform", file: "ascii-terraform.txt", color: "var(--color-accent)"},
+    {label: "Docker", file: "ascii-docker.txt", color: "var(--color-link)"},
+    {label: "Linux", file: "ascii-linux.txt", color: "var(--color-text-muted)"},
+    {label: "Rust", file: "ascii-rust.txt", color: "var(--color-accent)"},
+    {label: "C", file: "ascii-c.txt", color: "var(--color-tag)"},
+].map(({label, file, color}) => ({
+    label,
+    color,
+    content: readFileSync(resolve(asciiDir, file), "utf-8"),
+}));
 ---
 
-<BaseLayout title="Blog — Caio Couto">
-    <PostGrid posts={paginatedPosts.items}/>
-    <Pagination result={paginatedPosts} baseUrl="/page"/>
+<BaseLayout title="ASCII Caio">
+    <section class="home-hero">
+        <div class="home-hero__text">
+            <p class="home-hero__byline">
+                por <strong class="home-hero__byline-name">Caio Couto</strong>
+            </p>
+            <h1 class="home-hero__title">
+                Às vezes não é mágica,
+                é apenas engenharia.
+            </h1>
+            <p class="home-hero__desc">
+                Sou desenvolvedor e escrevo, como hobby, sobre o que acontece por baixo do código
+                que estudo e uso todos os dias: redes, sistemas operacionais, linguagens e as
+                decisões de engenharia que raramente aparecem no manual.
+            </p>
+            <div class="home-hero__cta">
+                <a href="#artigos" class="home-hero__btn home-hero__btn--primary">
+                    <span class="home-hero__btn-corner home-hero__btn-corner--tl" aria-hidden="true">+</span>
+                    <span class="home-hero__btn-corner home-hero__btn-corner--tr" aria-hidden="true">+</span>
+                    Ver artigos
+                    <span class="home-hero__btn-corner home-hero__btn-corner--bl" aria-hidden="true">+</span>
+                    <span class="home-hero__btn-corner home-hero__btn-corner--br" aria-hidden="true">+</span>
+                </a>
+                <a href="/sobre" class="home-hero__btn home-hero__btn--secondary">
+                    <span class="home-hero__btn-corner home-hero__btn-corner--tl" aria-hidden="true">+</span>
+                    <span class="home-hero__btn-corner home-hero__btn-corner--tr" aria-hidden="true">+</span>
+                    Sobre mim
+                    <span class="home-hero__btn-corner home-hero__btn-corner--bl" aria-hidden="true">+</span>
+                    <span class="home-hero__btn-corner home-hero__btn-corner--br" aria-hidden="true">+</span>
+                </a>
+            </div>
+        </div>
+        <div class="home-hero__collage" aria-hidden="true">
+            {asciiCards.map((card, i) => (
+                    <div class={`home-hero__collage-item home-hero__collage-item--${i}`}>
+                        <AsciiCard label={card.label} content={card.content} color={card.color}/>
+                    </div>
+            ))}
+        </div>
+    </section>
+
     {allSeries.length > 0 && (
-            <section>
-                <h2>Séries</h2>
-                <SeriesGrid seriesList={allSeries}/>
+            <section class="home-section home-section--wide">
+                <div class="home-section__inner">
+                    <h2 class="home-section__label">Séries</h2>
+                    <SeriesGrid seriesList={allSeries}/>
+                </div>
             </section>
     )}
+
+    <section class="home-section" id="artigos">
+        <div class="home-section__inner">
+            <h2 class="home-section__label">Artigos recentes</h2>
+            <PostGrid posts={paginatedPosts.items}/>
+            <Pagination result={paginatedPosts} baseUrl="/page"/>
+        </div>
+    </section>
 </BaseLayout>
+
+<script is:inline>
+    (function () {
+        const grid = document.querySelector(".series-grid");
+
+        if (!grid) return;
+
+        const items = [...grid.querySelectorAll(".series-grid__item")];
+
+        if (items.length === 0) return;
+
+        function updateActive() {
+            const gridRect = grid.getBoundingClientRect();
+            const gridCenter = gridRect.left + gridRect.width / 2;
+
+            let closest = items[0];
+            let minDist = Infinity;
+
+            for (const item of items) {
+                const rect = item.getBoundingClientRect();
+                const itemCenter = rect.left + rect.width / 2;
+                const dist = Math.abs(itemCenter - gridCenter);
+
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = item;
+                }
+            }
+
+            for (const item of items) {
+                item.classList.toggle("series-grid__item--active", item === closest);
+            }
+        }
+
+        updateActive();
+        grid.addEventListener("scroll", updateActive, {passive: true});
+    })();
+</script>
+
+<style>
+    .home-hero {
+        max-width: var(--layout-wide-max);
+        margin: 0 auto;
+        padding: var(--space-18) var(--layout-page-pad) var(--space-16);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-12);
+        align-items: center;
+    }
+
+    .home-hero__collage {
+        position: relative;
+        height: 32rem;
+    }
+
+    .home-hero__collage::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 95% 88% at 52% 45%, transparent 38%, var(--color-bg) 78%),
+        radial-gradient(ellipse 55% 50% at 82% 70%, transparent 30%, var(--color-bg) 65%),
+        radial-gradient(ellipse 40% 42% at 12% 68%, transparent 25%, var(--color-bg) 60%);
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .home-hero__collage-item {
+        position: absolute;
+    }
+
+    .home-hero__collage-item:hover {
+        z-index: 20;
+    }
+
+    .home-hero__collage-item--0 {
+        top: 0.5rem;
+        left: 0;
+        transform: rotate(-6deg);
+        z-index: 11;
+    }
+
+    .home-hero__collage-item--1 {
+        top: 9rem;
+        left: 0;
+        transform: rotate(-35deg);
+        z-index: 15;
+    }
+
+    .home-hero__collage-item--4 {
+        top: 2rem;
+        left: 14rem;
+        transform: rotate(-4deg);
+        z-index: 12;
+    }
+
+    .home-hero__collage-item--2 {
+        top: 18rem;
+        left: 6rem;
+        transform: rotate(-2deg);
+        z-index: 12;
+    }
+
+    .home-hero__collage-item--3 {
+        top: 16rem;
+        left: 17rem;
+        transform: rotate(5deg);
+        z-index: 14;
+    }
+
+    @media (max-width: 60rem) {
+        .home-hero {
+            grid-template-columns: 1fr;
+        }
+
+        .home-hero__collage {
+            display: none;
+        }
+    }
+
+    .home-hero__byline {
+        margin: 0 0 var(--space-5);
+        font-size: var(--font-size-sm);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+    }
+
+    .home-hero__byline-name {
+        color: var(--color-text);
+        font-weight: var(--font-weight-semibold);
+    }
+
+    .home-hero__title {
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-tight);
+        letter-spacing: var(--letter-spacing-tight);
+        margin: 0 0 var(--space-6);
+        color: var(--color-text);
+    }
+
+    .home-hero__desc {
+        font-size: var(--font-size-base);
+        color: var(--color-text-muted);
+        line-height: 1.7;
+        margin: 0 0 var(--space-8);
+        max-width: 27.5rem;
+    }
+
+    .home-hero__cta {
+        display: flex;
+        gap: var(--space-3);
+    }
+
+    .home-hero__btn {
+        position: relative;
+        padding: var(--space-3) var(--space-5);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        font-family: var(--font-family-mono), monospace;
+        text-decoration: none;
+        border: var(--border-width-dash) dashed var(--color-text);
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .home-hero__btn-corner {
+        position: absolute;
+        font-size: var(--corner-size);
+        line-height: 1;
+        background-color: var(--color-bg);
+        padding: 0 var(--space-1);
+        z-index: 2;
+        font-family: var(--font-family-mono), monospace;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .home-hero__btn-corner--tl {
+        top: var(--corner-offset);
+        left: var(--corner-offset);
+    }
+
+    .home-hero__btn-corner--tr {
+        top: var(--corner-offset);
+        right: var(--corner-offset);
+    }
+
+    .home-hero__btn-corner--bl {
+        bottom: var(--corner-offset);
+        left: var(--corner-offset);
+    }
+
+    .home-hero__btn-corner--br {
+        bottom: var(--corner-offset);
+        right: var(--corner-offset);
+    }
+
+    .home-hero__btn--primary {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+
+    .home-hero__btn--primary .home-hero__btn-corner {
+        color: var(--color-accent);
+    }
+
+    .home-hero__btn--primary:hover {
+        background-color: var(--color-accent);
+        color: var(--color-bg);
+    }
+
+    .home-hero__btn--secondary {
+        border-color: var(--color-border);
+        color: var(--color-text);
+    }
+
+    .home-hero__btn--secondary .home-hero__btn-corner {
+        color: var(--color-border);
+    }
+
+    .home-hero__btn--secondary:hover {
+        border-color: var(--color-text);
+    }
+
+    .home-section {
+        padding: 0 0 var(--space-12);
+    }
+
+    .home-section__inner {
+        max-width: var(--layout-wide-max);
+        margin: 0 auto;
+        padding: 0 var(--layout-page-pad);
+    }
+
+    .home-section--wide .home-section__inner {
+        max-width: var(--layout-wide-max);
+        padding: 0;
+    }
+
+    .home-section__label {
+        margin: 0 0 var(--space-5);
+        padding: 0 var(--layout-page-pad);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-normal);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        color: var(--color-accent);
+    }
+
+    .home-section--wide .home-section__label {
+        padding: 0 var(--space-8);
+    }
+</style>
