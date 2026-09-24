@@ -21,7 +21,7 @@ const ascii = `#*#*#*#*##              #*#*#*#*#*#*#*#*#*#*#*#*#                
                                        #*#*#              ##*###*###*###*###*###*##                                  #*#*#`;
 ---
 
-<BaseLayout title="404 — Página não encontrada" description="Esta página não existe.">
+<BaseLayout title="404 Página não encontrada" description="Esta página não existe.">
     <div class="not-found">
         <pre class="not-found__ascii" aria-hidden="true">{ascii}</pre>
         <div class="not-found__body">
@@ -124,10 +124,25 @@ const ascii = `#*#*#*#*##              #*#*#*#*#*#*#*#*#*#*#*#*#                
         user-select: none;
     }
 
-    .not-found__btn-corner--tl { top: var(--corner-offset); left: var(--corner-offset); }
-    .not-found__btn-corner--tr { top: var(--corner-offset); right: var(--corner-offset); }
-    .not-found__btn-corner--bl { bottom: var(--corner-offset); left: var(--corner-offset); }
-    .not-found__btn-corner--br { bottom: var(--corner-offset); right: var(--corner-offset); }
+    .not-found__btn-corner--tl {
+        top: var(--corner-offset);
+        left: var(--corner-offset);
+    }
+
+    .not-found__btn-corner--tr {
+        top: var(--corner-offset);
+        right: var(--corner-offset);
+    }
+
+    .not-found__btn-corner--bl {
+        bottom: var(--corner-offset);
+        left: var(--corner-offset);
+    }
+
+    .not-found__btn-corner--br {
+        bottom: var(--corner-offset);
+        right: var(--corner-offset);
+    }
 
     @media (max-width: 47.9375rem) {
         .not-found__ascii {
