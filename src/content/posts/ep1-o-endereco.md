@@ -16,6 +16,23 @@ Esse "isso" é um nome de domínio, uma convenção inventada por humanos para n
 sua vez, só opera com números. E antes que qualquer byte de requisição HTTP deixe a sua máquina, o sistema operacional
 precisa resolver essa contradição. Ele precisa de um endereço de verdade.
 
+Imagine que você chegou a uma cidade enorme com o nome de uma pessoa anotado num papel e nenhum endereço. Ninguém na rua
+entende de nomes, só de números de porta, então o primeiro passo é descobrir o número. Você começa pelo seu próprio
+caderninho de anotações, que quase nunca ajuda, e depois vai ao balcão de informações do bairro, escreve a pergunta num
+cartão-postal e a entrega. Sem cerimônia e sem confirmação de recebimento: uma pergunta vai, uma resposta volta, e um
+número de protocolo no canto do cartão garante que a resposta é mesmo a sua.
+
+O balcão, aliás, quase nunca sabe a resposta. O que ele sabe é por onde começar. Ele vai à central que conhece todas as
+terminações de endereço do mundo, e a central diz "isso é .com, pergunte ali". Ali dizem "essa empresa fica no prédio
+tal, pergunte na recepção deles", e a recepção, finalmente, dá o número. Você não anda por nada disso, o balcão anda por
+você, e ao voltar ele traz a resposta com um prazo de validade escrito, dizendo por quanto tempo ela vale. Enquanto
+valer, ele nem precisa sair de novo se alguém repetir a pergunta.
+
+Falta um detalhe doméstico: para o cartão sair de casa, alguém precisa saber onde fica a porta de saída, e isso se
+descobre gritando no corredor "quem aqui tem tal número?" e esperando o dono responder. E há um contratempo do lado do
+Node. Quem faz toda essa consulta fica parado até a resposta chegar, e um servidor de um funcionário só não pode se dar
+a esse luxo, então ele entrega o trabalho a um ajudante na sala dos fundos e segue atendendo o resto.
+
 Tudo começa em uma chamada de função.
 
 ---
